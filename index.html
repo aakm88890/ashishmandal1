@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashish Private Master</title>
+    <style>
+        :root { --blue: #1a73e8; --red: #d93025; --green: #34a853; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: #ffffff; margin: 0; padding: 0; overflow-x: hidden; }
+
+        /* 1. Login Screen */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 5000; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 350px; text-align: center; border: 1px solid #eee; }
+
+        /* 2. Header & Menu */
+        #main-content { display: none; }
+        .header { background: var(--blue); color: white; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .menu-btn { font-size: 28px; cursor: pointer; margin-right: 15px; }
+        
+        /* Side Menu Drawer */
+        .side-menu { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: #fff; box-shadow: 3px 0 15px rgba(0,0,0,0.2); transition: 0.3s; z-index: 2000; }
+        .side-menu.active { left: 0; }
+        .menu-head { background: var(--blue); color: white; padding: 30px 20px; font-size: 20px; font-weight: bold; }
+        .menu-opt { padding: 15px 20px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 500; color: #444; }
+
+        /* 3. Hero Section (Home) */
+        .hero { text-align: center; padding: 40px 20px; background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%); }
+        .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); object-fit: cover; margin-bottom: 20px; }
+
+        /* 4. Full Panels */
+        .full-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 3000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .panel-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .close-btn { font-size: 35px; cursor: pointer; color: var(--red); font-weight: bold; }
+
+        /* Boxes & Inputs */
+        .box { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #ddd; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; }
+        .btn-blue { background: var(--blue); color: white; }
+        .gmail-item { background: white; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <h2 style="color:var(--blue); margin-top:0;">🔒 Locked</h2>
+            <p style="font-size:14px; color:#666;">Enter password to access</p>
+            <input type="password" id="site-pass-input" placeholder="Password Dalein">
+            <button class="btn-blue" onclick="verifySiteAccess()">UNLOCK WEBSITE</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+        
+        <div class="header">
+            <div class="menu-btn" onclick="openMenu()">☰</div>
+            <div style="font-weight: bold; font-size: 18px;">Ashish Private Master</div>
+        </div>
+
+        <div class="hero">
+            <img src="368.jpg" alt="Profile" class="profile-img"> <h2 style="color:var(--blue); margin-bottom:5px;">Welcome Back, Ashish!</h2>
+            <p style="color:#666; margin-top:0;">Aapka private cloud system taiyar hai.</p>
+        </div>
+
+        <div class="side-menu" id="side-menu">
+            <div class="menu-head">Dashboard Menu</div>
+            <div class="menu-opt" onclick="openPanel('panel-gmail')">📧 Gmail Saver Manager</div>
+            <div class="menu-opt" onclick="openPanel('panel-upload')">📤 Photo & Video Upload</div>
+            <div class="menu-opt" onclick="openPanel('panel-gallery')">🖼️ My Gallery Access</div>
+            <div class="menu-opt" onclick="openPanel('panel-pass')">🔐 Website Password</div>
+            <div class="menu-opt" onclick="location.reload()" style="color:var(--red); border-top: 1px solid #eee; margin-top:20px;">🚪 Logout</div>
+        </div>
+
+        <div id="panel-gmail" class="full-panel">
+            <div class="panel-head"><h2>📧 Gmail Saver</h2> <span class="close-btn" onclick="closePanel('panel-gmail')">×</span></div>
+            <div class="box">
+                <input type="email" id="g-mail" placeholder="Gmail ID">
+                <input type="text" id="g-pass" placeholder="Password">
+                <button class="btn-blue" style="background:var(--green);" onclick="saveGmail()">SAVE ACCOUNT</button>
+            </div>
+            <input type="text" placeholder="🔍 Search Saved Gmail..." onkeyup="searchGmail(this.value)" style="border:2px solid var(--blue); background:#e8f0fe;">
+            <div id="gmail-list" style="margin-top:15px;"></div>
+        </div>
+
+        <div id="panel-upload" class="full-panel">
+            <div class="panel-head"><h2>📤 Upload Files</h2> <span class="close-btn" onclick="closePanel('panel-upload')">×</span></div>
+            <div class="box" style="border-color: var(--blue);">
+                <p style="font-size:14px; margin-bottom:10px;">Choose Photo or Video:</p>
+                <input type="file" id="up-file">
+                <button class="btn-blue" onclick="alert('Drive setup check karein!')">DRIVE MEIN BHEJEIN</button>
+            </div>
+        </div>
+
+        <div id="panel-gallery" class="full-panel">
+            <div class="panel-head"><h2>🖼️ My Gallery</h2> <span class="close-btn" onclick="closePanel('panel-gallery')">×</span></div>
+            <div id="gallery-list" style="color:#888;">Files loading...</div>
+        </div>
+
+        <div id="panel-pass" class="full-panel">
+            <div class="panel-head"><h2>🔐 Change Pass</h2> <span class="close-btn" onclick="closePanel('panel-pass')">×</span></div>
+            <div class="box">
+                <input type="text" id="new-p" placeholder="Naya Website Password">
+                <button class="btn-blue" style="background:#555;" onclick="updateWebPass()">UPDATE PASSWORD</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password Security
+        let currentPass = localStorage.getItem('ashishPass') || "Ashish1111";
+
+        function verifySiteAccess() {
+            let input = document.getElementById('site-pass-input').value;
+            if (input === currentPass) {
+                document.getElementById('login-screen').style.display = "none";
+                document.getElementById('main-content').style.display = "block";
+            } else { alert("❌ Galat Password!"); }
+        }
+
+        // Navigation Controls
+        function openMenu() { document.getElementById('side-menu').classList.add('active'); document.getElementById('overlay').style.display = "block"; }
+        function closeMenu() { document.getElementById('side-menu').classList.remove('active'); document.getElementById('overlay').style.display = "none"; }
+        function openPanel(id) { document.getElementById(id).style.display = "block"; closeMenu(); if(id==='panel-gmail') renderMails(); }
+        function closePanel(id) { document.getElementById(id).style.display = "none"; }
+
+        // Gmail Logic: Save, Search, Delete
+        function saveGmail() {
+            let m = document.getElementById('g-mail').value, p = document.getElementById('g-pass').value;
+            if(!m || !p) return alert("Pehle details bhariye!");
+            let list = JSON.parse(localStorage.getItem('mList') || "[]");
+            list.push({e:m, p:p}); localStorage.setItem('mList', JSON.stringify(list));
+            document.getElementById('g-mail').value = ""; document.getElementById('g-pass').value = "";
+            renderMails();
+        }
+
+        function renderMails(filter="") {
+            let d = JSON.parse(localStorage.getItem('mList') || "[]");
+            let html = d.filter(i => i.e.toLowerCase().includes(filter.toLowerCase())).map((i,idx) => `
+                <div class="gmail-item">
+                    <div><b>${i.e}</b><br><small>Pass: ${i.p}</small></div>
+                    <button onclick="delMail(${idx})" style="color:var(--red); width:auto; padding:5px 10px; background:none;">DELETE</button>
+                </div>`).join('');
+            document.getElementById('gmail-list').innerHTML = html || "<p style='text-align:center;'>No accounts found.</p>";
+        }
+        function searchGmail(v) { renderMails(v); }
+        function delMail(i) { 
+            if(confirm("Kya sach mein delete karna hai?")) {
+                let d = JSON.parse(localStorage.getItem('mList')); d.splice(i,1); 
+                localStorage.setItem('mList',JSON.stringify(d)); renderMails(); 
+            }
+        }
+
+        function updateWebPass() {
+            let p = document.getElementById('new-p').value;
+            if(p) { localStorage.setItem('ashishPass', p); currentPass = p; alert("Password Badal Gaya!"); closePanel('panel-pass'); }
+        }
+    </script>
+</body>
+</html>
